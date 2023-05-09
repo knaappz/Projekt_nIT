@@ -18,3 +18,6 @@ if args.input_file.endwith('.json'):
             print('Niepoprawnny format pliku...')
             exit(1)
 
+if args.format == 'json':
+    with open(args.output_file, 'w') as j:
+        json.dump(data, j)
