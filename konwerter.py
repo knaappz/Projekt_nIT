@@ -18,6 +18,16 @@ if args.input_file.endwith('.json'):
             print('Niepoprawnny format pliku...')
             exit(1)
 
+elif args.input_file.endswith('.yaml'):
+    with open(args.input_file, 'r') as y:
+        try:
+            data = yaml.safe_load(y)
+        except yaml.YAMLError as e:
+            print('Niepoprawny format pliku...')
+            exit(1)
+
+
 if args.format == 'json':
     with open(args.output_file, 'w') as j:
         json.dump(data, j)
+
