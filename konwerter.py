@@ -26,7 +26,12 @@ elif args.input_file.endswith('.yaml'):
             print('Niepoprawny format pliku...')
             exit(1)
 
+elif args.input_file.endswith('.xml'):
+    tree = ET.parse(args.input_file)
+    root = tree.getroot()
+    data = xmltodict.parse(ET.tostring(root))
 
+#funkcje  zapisujace nowy plik
 if args.format == 'json':
     with open(args.output_file, 'w') as j:
         json.dump(data, j)
