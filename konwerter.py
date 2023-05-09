@@ -31,3 +31,7 @@ if args.format == 'json':
     with open(args.output_file, 'w') as j:
         json.dump(data, j)
 
+elif args.format == 'yaml' or 'yml':
+    with open(args.output_file, 'w') as y:
+        yaml.dump(data, y ,default_flow_style=False)
+
