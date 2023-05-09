@@ -40,3 +40,7 @@ elif args.format == 'yaml' or 'yml':
     with open(args.output_file, 'w') as y:
         yaml.dump(data, y ,default_flow_style=False)
 
+elif args.format == 'xml':
+    xml_data = xmltodict.unparse(data, pretty=True)
+    with open(args.output_file, 'w') as x:
+        x.write(xml_data)
