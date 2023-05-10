@@ -1,46 +1,87 @@
-import argparse
 import json
 import yaml
-import xmltodict
 import xml.etree.ElementTree as ET
+import xmltodict
 
-parser = argparse.ArgumentParser(description='Konwersja plików XML, JSON i YAML.')
-parser.add_argument('input_file', type=str, help='Nazwa pliku wejściowego.')
-parser.add_argument('output_file', type=str, help='Nazwa pliku wyjściowego.')
-parser.add_argument('format', type=str, help='Format pliku')
-args = parser.parse_args()
+# pobranie nazwy pliku wejściowego
+print('Konwerter plików json, xml, yaml')
 
-if args.input_file.endwith('.json'):
-    with open(args.input_file, 'r') as j:
+while True:
+    input_file = input("Podaj nazwę pliku wejściowego: ")
+
+    # pobranie nazwy pliku wyjściowego
+    output_file = input("Podaj nazwę pliku wyjściowego: ")
+
+    format = output_file.split('.')[-1].lower()
+
+    if input_file.endswith('.json'):
+
+        with open(input_file, 'r') as j:
+            try:
+                data = json.load(j)
+            except json.JSONDecodeError as e:
+                print("Błąd w parsowaniu pliku JSON: ", e)
+                exit(1)
+
+    elif input_file.endswith('.yml') or input_file.endswith('.yaml'):
+
+        with open(input_file, 'r') as y:
+            try:
+                data = yaml.safe_load(y)
+            except yaml.YAMLError as e:
+                print("Błąd w parsowaniu pliku YAML: ", e)
+                exit(1)
+
+    elif input_file.endswith('.xml'):
+
         try:
-            data = json.load(j)
-        except json.JSONDecodeError as e:
-            print('Niepoprawnny format pliku...')
+            tree = ET.parse(input_file)
+            root = tree.getroot()
+            data = dict()
+            for child in root:
+                data[child.tag] = child.text
+
+        except ET.ParseError as e:
+            print(f'Błąd parsowania pliku XML: {e}')
             exit(1)
 
-elif args.input_file.endswith('.yaml'):
-    with open(args.input_file, 'r') as y:
-        try:
-            data = yaml.safe_load(y)
-        except yaml.YAMLError as e:
-            print('Niepoprawny format pliku...')
+        except Exception as e:
+            print(f'Błąd odczytu pliku: {e}')
             exit(1)
 
-elif args.input_file.endswith('.xml'):
-    tree = ET.parse(args.input_file)
-    root = tree.getroot()
-    data = xmltodict.parse(ET.tostring(root))
+    else:
+        print("Nieobsługiwany format pliku wejściowego: ", input_file)
+        exit(1)
 
-#funkcje  zapisujace nowy plik
-if args.format == 'json':
-    with open(args.output_file, 'w') as j:
-        json.dump(data, j)
+    if format == "json":
+        with open(output_file, 'w') as j:
+            json.dump(data, j, indent=4, sort_keys=True)
 
-elif args.format == 'yaml' or 'yml':
-    with open(args.output_file, 'w') as y:
-        yaml.dump(data, y ,default_flow_style=False)
+    elif format == "yml" or format == "yaml":
+        with open(output_file, 'w') as y:
+            yaml.dump(data, y, default_flow_style=False)
 
-elif args.format == 'xml':
-    xml_data = xmltodict.unparse(data, pretty=True)
-    with open(args.output_file, 'w') as x:
-        x.write(xml_data)
+    elif format == "xml":
+        try:
+            root = ET.Element('data')
+            for key, value in data.items():
+                child = ET.SubElement(root, key)
+                child.text = str(value)
+            tree = ET.ElementTree(root)
+            tree.write(output_file, encoding='utf-8', xml_declaration=True)
+
+        except Exception as e:
+            print(f'Błąd zapisu pliku XML: {e}')
+            exit(1)
+
+    else:
+        print("Nieobsługiwany format pliku wyjściowego:", format)
+        exit(1)
+
+    print("Konwersja zakończona powodzeniem")
+    
+    taknie = input('Chcesz konwertować dalej? ')
+    if taknie == 'tak':
+        continue
+    elif taknie == 'nie':
+        break
