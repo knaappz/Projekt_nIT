@@ -1,0 +1,15 @@
+<rozklad>
+    <miejscowosc>Poznan</miejscowosc> 
+    <linie>
+        <linia>
+            <numer>5</numer>
+            <poczatek>Gorczyn</poczatek>
+            <koniec>Srokowo</koniec>
+        </linia>
+        <linia>
+            <numer>105</numer>
+            <poczatek>Rondo Rataje</poczatek>
+            <koniec>Putkowo</koniec>
+        </linia>
+    </linie>
+</rozklad>

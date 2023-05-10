@@ -81,3 +81,5 @@ while True:
         continue
     elif taknie == 'n':
         break
+    else:
+        break
