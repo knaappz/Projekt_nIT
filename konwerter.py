@@ -3,10 +3,11 @@ import yaml
 import xml.etree.ElementTree as ET
 import xmltodict
 
-# pobranie nazwy pliku wejściowego
 print('Konwerter plików json, xml, yaml')
 
 while True:
+    
+    # pobranie nazwy pliku wejściowego
     input_file = input("Podaj nazwę pliku wejściowego: ")
 
     # pobranie nazwy pliku wyjściowego
@@ -34,20 +35,15 @@ while True:
 
     elif input_file.endswith('.xml'):
 
-        try:
-            tree = ET.parse(input_file)
-            root = tree.getroot()
-            data = dict()
-            for child in root:
-                data[child.tag] = child.text
+        with open(input_file, 'r') as f:
+            xml_data = f.read()
+            try:
 
-        except ET.ParseError as e:
-            print(f'Błąd parsowania pliku XML: {e}')
-            exit(1)
+                data = xmltodict.parse(xml_data)
 
-        except Exception as e:
-            print(f'Błąd odczytu pliku: {e}')
-            exit(1)
+            except Exception as e:
+                print(f'Błąd odczytu pliku XML: {e}')
+                exit(1)
 
     else:
         print("Nieobsługiwany format pliku wejściowego: ", input_file)
@@ -80,8 +76,8 @@ while True:
 
     print("Konwersja zakończona powodzeniem")
     
-    taknie = input('Chcesz konwertować dalej? ')
-    if taknie == 'tak':
+    taknie = input('Chcesz konwertować dalej? (y/n)')
+    if taknie == 'y':
         continue
-    elif taknie == 'nie':
+    elif taknie == 'n':
         break
