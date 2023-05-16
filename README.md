@@ -1,3 +1,3 @@
 Konwerter plików xml, json oraz yaml(yml).
-Trzeba podać mu ścieżke do pliku wejsciowego oraz wyjsciowego.
-Pozdrawiam
+Przykładowe użycie w konsoli cmd:
+--> konwerter.exe "sciekza_do_pliku_wejsciowego" "sciekza_do_pliku_wyjsciowego" --format "wybrany_format_pliku" 
