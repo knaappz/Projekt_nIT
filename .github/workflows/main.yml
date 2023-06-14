@@ -1,0 +1,33 @@
+name: Budowanie i przesyłanie pliku .exe
+
+on:
+  schedule:
+    - cron: '0 12 * * 0'  # Uruchomienie raz w tygodniu o 12:00 w niedzielę
+  push:
+    branches:
+      - master  # Uruchomienie po pushowaniu na mastera
+  workflow_dispatch:  # Uruchomienie ręcznie przez użytkownika
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        .\.github\scripts\installResources.bat
+      shell: powershell
+
+    - name: Build .exe
+      run: |
+        pyinstaller --onefile konwerter.py
+      shell: powershell
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: my_script_exe
+        path: ./dist/konwerter.exe
