@@ -18,7 +18,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        .\.github\scripts\installResources.bat
+        .\installResources.bat
       shell: powershell
 
     - name: Build .exe
