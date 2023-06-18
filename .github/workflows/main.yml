@@ -5,8 +5,8 @@ on:
     - cron: '0 12 * * 0'  # Uruchomienie raz w tygodniu o 12:00 w niedzielę
   push:
     branches:
-      - master  # Uruchomienie po pushowaniu na mastera
-  workflow_dispatch:  # Uruchomienie ręcznie przez użytkownika
+      - master  
+  workflow_dispatch:  
 
 jobs:
   build:
@@ -29,5 +29,5 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
-        name: my_script_exe
+        name: konwerter_exe
         path: ./dist/konwerter.exe
